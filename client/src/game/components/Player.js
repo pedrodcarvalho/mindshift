@@ -9,7 +9,7 @@ export default class Player {
     this.color = color;
     this.velocity = { x: 0, y: 0 };
     this.speed = 200;
-    this.jumpStrength = -500;
+    this.jumpStrength = 500;
     this.onGround = false;
 
     // Coyote time properties
@@ -98,7 +98,7 @@ export default class Player {
     }
 
     // GRAVITY * seconds => 1500px * 0.0167s = fall rate of 25px/s
-    this.velocity.y += GRAVITY * seconds;
+    this.velocity.y -= GRAVITY * seconds;
 
     // Update position
     this.x += this.velocity.x * seconds;

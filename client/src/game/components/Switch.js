@@ -7,12 +7,21 @@ export default class Switch {
     this.targetPlatform = targetPlatform;
     this.color = color;
     this.activated = false;
+    this.prevCollision = false;
   }
 
-  update(player) {
-    if (player.x < this.x + this.width && player.x + player.width > this.x && player.y < this.y + this.height && player.y + player.height > this.y) {
+  update(deltaTime, inputHandler, player) {
+    // Collision detection with the player
+    const isColliding = player.x < this.x + this.width && player.x + player.width > this.x && player.y < this.y + this.height && player.y + player.height > this.y;
+    console.log(player.x, player.y, this.x, this.y, this.width, this.height, isColliding, this.prev)
+    if (isColliding && !this.prevCollision) {
+      // Only toggle when player first touches the switch
       this.activated = !this.activated;
       this.targetPlatform.visible = !this.targetPlatform.visible;
+      this.prevCollision = true;
+    } else if (!isColliding) {
+      // Reset the collision state when the player leaves the switch
+      this.prevCollision = false;
     }
   }
 

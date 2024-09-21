@@ -42,7 +42,7 @@ export default class GameState {
     this.player.update(deltaTime, inputHandler);
 
     // Apply simple gravity and ground collision
-    if (this.player.y + this.player.height >= this.levelHeight) {
+    if (this.player.y <= 0) {
       this.player.velocity.y = 0;
       this.player.setOnGround(true);
     } else {
@@ -56,11 +56,11 @@ export default class GameState {
     if (this.player.x + this.player.width > this.levelWidth) {
       this.player.x = this.levelWidth - this.player.width; // Prevent moving right out of bounds
     }
-    if (this.player.y < 0) {
-      this.player.y = 0; // Prevent moving above the top boundary
-    }
     if (this.player.y + this.player.height > this.levelHeight) {
-      this.player.y = this.levelHeight - this.player.height; // Prevent moving below the bottom boundary
+      this.player.y = this.levelHeight - this.player.height; // Prevent moving above the top boundary
+    }
+    if (this.player.y < 0) {
+      this.player.y = 0; // Prevent moving below the bottom boundary
     }
 
     // Update platforms
@@ -117,9 +117,8 @@ export default class GameState {
     this.platforms.forEach((platform) => {
       if (CollisionDetector.checkCollision(this.player, platform)) {
         // Simple collision response: place player on top of the platform
-        if (this.player.velocity.y > 0) {
-          // Falling down
-          this.player.y = platform.y - this.player.height;
+        if (this.player.velocity.y < 0) {
+          this.player.y = platform.y + platform.height;
           this.player.velocity.y = 0;
           this.player.setOnGround(true);
         }

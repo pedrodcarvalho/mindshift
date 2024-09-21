@@ -36,6 +36,10 @@ export default class GameEngine {
     // Save the current state of the context
     this.context.save();
 
+    // Flip the y-axis to make the bottom-left the origin
+    this.context.translate(0, this.context.canvas.height); // Move origin to bottom-left
+    this.context.scale(1, -1); // Flip y-axis
+
     // Apply the camera offset
     this.context.translate(-this.camera.x, -this.camera.y);
 
