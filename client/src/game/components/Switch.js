@@ -13,7 +13,7 @@ export default class Switch {
   update(deltaTime, inputHandler, player) {
     // Collision detection with the player
     const isColliding = player.x < this.x + this.width && player.x + player.width > this.x && player.y < this.y + this.height && player.y + player.height > this.y;
-    console.log(player.x, player.y, this.x, this.y, this.width, this.height, isColliding, this.prev)
+
     if (isColliding && !this.prevCollision) {
       // Only toggle when player first touches the switch
       this.activated = !this.activated;

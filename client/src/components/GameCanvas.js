@@ -1,4 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
+import axios from '../api/axiosInstance';
+import { useNavigate } from 'react-router-dom';
 import GameEngine from '../engine/GameEngine';
 import GameState from '../game/GameState';
 import { GAME_WIDTH, GAME_HEIGHT } from '../game/constants';
@@ -10,6 +12,29 @@ const GameCanvas = () => {
 
   const [score, setScore] = useState(0); // Track the score state
   const [levelComplete, setLevelComplete] = useState(false); // Track if the level is complete
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        if (!token) {
+          throw new Error('No token found');
+        }
+
+        await axios.get('/auth/check', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+      } catch (error) {
+        navigate('/');
+      }
+    };
+
+    checkAuth();
+  }, [navigate]);
 
   useEffect(() => {
     const handleResize = () => {

@@ -14,11 +14,11 @@ export default function createLevel1() {
     new Platform(600, 420, 100, 20),
   ];
 
-  const switches = [new Switch(200, 260, 30, 10, platforms[1])];
+  const switches = [new Switch(200, 240, 30, 10, platforms[1])];
 
-  const doors = [new Door(650, 450, 50, 50)];
+  const doors = [new Door(650, 440, 50, 50)];
 
-  const collectibles = [new Collectible(220, 280, 10), new Collectible(420, 380, 10), new Collectible(620, 480, 10)];
+  const collectibles = [new Collectible(220, 260, 10), new Collectible(420, 360, 10), new Collectible(620, 500, 10)];
 
   return {
     player,
