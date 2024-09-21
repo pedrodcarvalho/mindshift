@@ -1,0 +1,15 @@
+{
+  "printWidth": 999,
+  "singleQuote": true,
+  "overrides": [
+    {
+      "files": [
+        "*.jsx",
+        "*.js"
+      ],
+      "options": {
+        "singleAttributePerLine": true
+      }
+    }
+  ]
+}
