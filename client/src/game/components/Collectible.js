@@ -1,10 +1,10 @@
 export default class Collectible {
-  constructor(x, y, size, color = 'yellow') {
+  constructor(x, y, size, color = 'yellow', collected = false) {
     this.x = x;
     this.y = y;
     this.size = size;
     this.color = color;
-    this.collected = false;
+    this.collected = collected;
   }
 
   update(deltaTime, player, gameState) {

@@ -1,18 +1,22 @@
 import createLevel1 from './levels/level1';
 import createLevel2 from './levels/level2';
+import createDefaultLevel from './levels/defaultLevel';
 
 export default class GameState {
-  constructor() {
-    this.currentLevel = 1;
-    this.loadLevel(this.currentLevel);
-    this.score = 0;
-    this.levelComplete = false;
+  constructor(savedState = {}) {
+    this.player = savedState.player || { x: 0, y: 0 };
+    this.score = savedState.score || 0;
+    this.levelComplete = savedState.levelComplete || false;
+    this.collectibles = savedState.collectibles || [];
+    this.currentLevel = savedState.currentLevel || 1;
+    this.loadLevel(this.currentLevel, savedState);
+    this.isTransitioning = false;
   }
 
-  loadLevel(levelNumber) {
+  loadLevel(levelNumber, savedState = {}) {
     switch (levelNumber) {
       case 1:
-        const level1 = createLevel1();
+        const level1 = createLevel1(savedState);
         this.player = level1.player;
         this.platforms = level1.platforms;
         this.switches = level1.switches;
@@ -22,7 +26,7 @@ export default class GameState {
         this.levelHeight = level1.levelHeight;
         break;
       case 2:
-        const level2 = createLevel2();
+        const level2 = createLevel2(savedState);
         this.player = level2.player;
         this.platforms = level2.platforms;
         this.switches = level2.switches;
@@ -33,9 +37,21 @@ export default class GameState {
         break;
       // Add more cases for additional levels
       default:
-        // TODO: Add more levels
+        const defaultLevel = createDefaultLevel(savedState);
+        this.player = defaultLevel.player;
+        this.platforms = defaultLevel.platforms;
+        this.switches = defaultLevel.switches || [];
+        this.doors = defaultLevel.doors || [];
+        this.collectibles = defaultLevel.collectibles || [];
+        this.levelWidth = defaultLevel.levelWidth;
+        this.levelHeight = defaultLevel.levelHeight;
         break;
     }
+  }
+
+  // Method to save the game state
+  saveGameState() {
+    return this;
   }
 
   update(deltaTime, inputHandler) {
@@ -88,11 +104,14 @@ export default class GameState {
       }
     });
 
-    if (this.levelComplete) {
+    if (this.levelComplete && !this.isTransitioning) {
+      this.isTransitioning = true;
+
       setTimeout(() => {
         this.currentLevel += 1;
         this.loadLevel(this.currentLevel);
         this.levelComplete = false;
+        this.isTransitioning = false;
       }, 1000);
     }
   }

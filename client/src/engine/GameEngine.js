@@ -7,29 +7,38 @@ import Camera from './Camera';
 export default class GameEngine {
   constructor(context, gameState, canvasWidth, canvasHeight) {
     this.context = context;
-    this.gameState = gameState;
+    this.gameState = gameState; // Loaded game state passed here
     this.inputHandler = new InputHandler();
     this.gameLoop = new GameLoop(this.update.bind(this), this.render.bind(this));
     this.camera = new Camera(canvasWidth, canvasHeight, gameState.levelWidth, gameState.levelHeight);
     this.onUpdate = null; // Callback to update HUD state
   }
 
+  // Initialize the game engine (start loop after checking gameState)
   init() {
-    this.gameLoop.start();
+    if (this.gameState) {
+      this.gameLoop.start(); // Only start game loop if gameState is loaded
+    } else {
+      console.error('Game state is not loaded. Cannot start the game engine.');
+    }
   }
 
   update(deltaTime) {
-    this.gameState.update(deltaTime, this.inputHandler);
-    this.gameState.checkCollisions(CollisionDetector);
-    this.camera.follow(this.gameState.player);
+    if (!this.gameState) return; // Safety check if gameState is not loaded
+
+    this.gameState.update(deltaTime, this.inputHandler); // Update gameState based on deltaTime
+    this.gameState.checkCollisions(CollisionDetector); // Handle collisions
+    this.camera.follow(this.gameState.player); // Update camera position
 
     if (this.onUpdate) {
-      // Update HUD state
+      // Call the HUD update callback
       this.onUpdate();
     }
   }
 
   render() {
+    if (!this.context || !this.gameState) return;
+
     // Clear the canvas for the next frame
     this.context.clearRect(0, 0, this.context.canvas.width, this.context.canvas.height);
 
@@ -43,7 +52,7 @@ export default class GameEngine {
     // Apply the camera offset
     this.context.translate(-this.camera.x, -this.camera.y);
 
-    // Render the entire game state (including the player)
+    // Render the entire game state
     this.gameState.render(this.context);
 
     // Restore the context to its original state

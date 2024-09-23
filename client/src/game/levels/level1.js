@@ -4,8 +4,8 @@ import Switch from '../components/Switch';
 import Door from '../components/Door';
 import Collectible from '../components/Collectible';
 
-export default function createLevel1() {
-  const player = new Player(50, 400, 30, 30);
+export default function createLevel1(savedState = {}) {
+  const player = new Player(savedState?.player?.x || 50, savedState?.player?.y || 400, 30, 30);
 
   const platforms = [
     new Platform(0, 0, 2000, 100), // Ground
@@ -14,11 +14,11 @@ export default function createLevel1() {
     new Platform(600, 420, 100, 20),
   ];
 
-  const switches = [new Switch(200, 240, 30, 10, platforms[1])];
+  const switches = [new Switch(200, 240, 30, 10, platforms[1], 'green', savedState?.switches?.[0]?.activated || false)];
 
   const doors = [new Door(650, 440, 50, 50)];
 
-  const collectibles = [new Collectible(220, 260, 10), new Collectible(420, 360, 10), new Collectible(620, 500, 10)];
+  const collectibles = [new Collectible(220, 260, 10, 'yellow', savedState?.collectibles?.[0]?.collected || false), new Collectible(420, 360, 10, 'yellow', savedState?.collectibles?.[1]?.collected || false), new Collectible(620, 500, 10, 'yellow', savedState?.collectibles?.[2]?.collected || false)];
 
   return {
     player,

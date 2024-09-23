@@ -1,12 +1,12 @@
 export default class Switch {
-  constructor(x, y, width, height, targetPlatform, color = 'green') {
+  constructor(x, y, width, height, targetPlatform, color = 'green', activated = false) {
     this.x = x;
     this.y = y;
     this.width = width;
     this.height = height;
     this.targetPlatform = targetPlatform;
     this.color = color;
-    this.activated = false;
+    this.activated = activated;
     this.prevCollision = false;
   }
 
